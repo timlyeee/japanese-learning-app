@@ -1,0 +1,38 @@
+export interface Word {
+  id: number;
+  text: string;
+  reading: string;
+  meaning: string;
+  example: string;
+  translation: string;
+}
+export interface Course {
+  id: number;
+  title: string;
+  description: string;
+  symbol: string;
+  dialogue: string;
+  grammar: string;
+  question: string;
+  options: string[];
+  answer: number;
+}
+export interface Review {
+  level: number;
+  due: number;
+}
+export interface ApiConfig {
+  baseUrl: string;
+  model: string;
+}
+export interface Progress {
+  done: number[];
+  reviews: Record<number, Review>;
+  days: string[];
+  config: ApiConfig;
+}
+export interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
+export type Page = "home" | "courses" | "kana" | "words" | "chat" | "settings";

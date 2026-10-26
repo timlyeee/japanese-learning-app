@@ -1,0 +1,36 @@
+{
+  "name": "nihongo-garden",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others --names API,WEB \"node --watch --import tsx --env-file-if-exists=.env server/index.ts\" \"vite\"",
+    "build": "tsc --noEmit && vite build",
+    "start": "node --import tsx --env-file-if-exists=.env server/index.ts --production",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "format": "prettier --write src server vite.config.ts tsconfig.json package.json index.html README.md",
+    "format:check": "prettier --check src server vite.config.ts tsconfig.json package.json index.html README.md"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "type": "module"
+}
