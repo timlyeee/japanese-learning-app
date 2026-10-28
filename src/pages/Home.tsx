@@ -46,12 +46,9 @@ export default function Home({
             <br />
             走向更大的世界。
           </h2>
-          <p>从五十音到日常交流，一条属于你的学习路线。</p>
-          <button
-            className="primary"
-            onClick={() => (next ? openCourse(next.id) : navigate("words"))}
-          >
-            继续今日学习 →
+          <p>平假名 · 片假名 · 每关十题，学完就练。</p>
+          <button className="primary" onClick={() => navigate("kana")}>
+            开始五十音闯关 →
           </button>
         </div>
         <div className="hero-art" aria-hidden="true">

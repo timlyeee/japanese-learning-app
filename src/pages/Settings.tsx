@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Capacitor } from "@capacitor/core";
+import { NativeLearning } from "../lib/native";
 import { parseProgress } from "../lib/progress";
 import type { ApiConfig, Progress } from "../types";
 export default function Settings({
@@ -16,6 +18,12 @@ export default function Settings({
   const [key, setKey] = useState(apiKey);
   const [status, setStatus] = useState("");
   function exportProgress() {
+    if (Capacitor.isNativePlatform()) {
+      void NativeLearning.backup({
+        content: JSON.stringify(progress, null, 2),
+      }).catch((err: Error) => setStatus(err.message));
+      return;
+    }
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(progress, null, 2)], {
         type: "application/json",

@@ -1,4 +1,6 @@
 import type { ApiConfig, Message } from "../types";
+import { Capacitor, CapacitorHttp } from "@capacitor/core";
+import { tutorPrompt } from "./prompt";
 export async function requestChat(
   config: ApiConfig,
   apiKey: string,
@@ -6,6 +8,46 @@ export async function requestChat(
   scenario: string,
   signal: AbortSignal,
 ): Promise<string> {
+  if (Capacitor.isNativePlatform()) {
+    if (!apiKey)
+      throw new Error(
+        "请先在 API 设置中填写密钥。Android 版直接连接你的 AI 服务。",
+      );
+    const endpoint = new URL(config.baseUrl);
+    if (
+      endpoint.protocol !== "https:" ||
+      endpoint.username ||
+      endpoint.password ||
+      endpoint.search ||
+      endpoint.hash
+    )
+      throw new Error("Android 版请使用 HTTPS 的 API 基础地址");
+    endpoint.pathname =
+      endpoint.pathname.replace(/\/$/, "") + "/chat/completions";
+    const result = await CapacitorHttp.post({
+      url: endpoint.toString(),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      data: {
+        model: config.model,
+        temperature: 0.7,
+        messages: [
+          { role: "system", content: tutorPrompt(scenario) },
+          ...messages,
+        ],
+      },
+      connectTimeout: 15000,
+      readTimeout: 45000,
+    });
+    if (signal.aborted) throw new DOMException("已取消", "AbortError");
+    if (result.status < 200 || result.status >= 300)
+      throw new Error(`AI 服务返回 ${result.status}，请检查密钥、模型和余额`);
+    const content = result.data?.choices?.[0]?.message?.content;
+    if (typeof content !== "string") throw new Error("AI 返回格式不兼容");
+    return content;
+  }
   const response = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

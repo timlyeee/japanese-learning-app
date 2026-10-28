@@ -11,6 +11,7 @@ describe("学习进度与复习", () => {
       ...legacy,
       done: [0, 1],
       config: initialProgress().config,
+      quiz: {},
     });
   });
   it("拒绝损坏的备份", () => {

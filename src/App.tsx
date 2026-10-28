@@ -61,7 +61,26 @@ export default function App() {
           chat={() => navigate("chat")}
         />
       )}
-      {page === "kana" && <Kana activity={activity} />}
+      {page === "kana" && (
+        <Kana
+          activity={activity}
+          results={progress.quiz}
+          finish={(id, result) =>
+            setProgress((p) =>
+              withActivity({
+                ...p,
+                quiz: {
+                  ...p.quiz,
+                  [id]:
+                    !p.quiz[id] || result.correct > p.quiz[id].correct
+                      ? result
+                      : p.quiz[id],
+                },
+              }),
+            )
+          }
+        />
+      )}
       {page === "words" && (
         <Words
           progress={progress}

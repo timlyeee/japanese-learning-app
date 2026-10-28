@@ -26,6 +26,7 @@ export interface ApiConfig {
   model: string;
 }
 export interface Progress {
+  quiz: Record<string, import("./lib/quiz").QuizResult>;
   done: number[];
   reviews: Record<number, Review>;
   days: string[];

@@ -1,6 +1,7 @@
 import type { Progress, Review } from "../types";
 export const STORAGE_KEY = "hiyori";
 export const initialProgress = (): Progress => ({
+  quiz: {},
   done: [],
   reviews: {},
   days: [],
@@ -34,7 +35,35 @@ export function parseProgress(raw: string): Progress {
       throw new Error("复习记录格式不正确");
   }
   const config = value.config;
+  const quiz = value.quiz ?? {};
+  if (
+    !quiz ||
+    typeof quiz !== "object" ||
+    Array.isArray(quiz) ||
+    !Object.values(quiz).every((entry) => {
+      const r = entry as import("./quiz").QuizResult;
+      return (
+        r &&
+        Number.isInteger(r.correct) &&
+        Number.isInteger(r.total) &&
+        r.total > 0 &&
+        r.correct >= 0 &&
+        r.correct <= r.total &&
+        Number.isInteger(r.stars) &&
+        r.stars ===
+          (r.correct === r.total
+            ? 3
+            : r.correct / r.total >= 0.9
+              ? 2
+              : r.correct / r.total >= 0.8
+                ? 1
+                : 0)
+      );
+    })
+  )
+    throw new Error("闯关记录格式不正确");
   return {
+    quiz,
     done: [...new Set<number>(value.done)],
     days: [...new Set<string>(value.days)],
     reviews: value.reviews,

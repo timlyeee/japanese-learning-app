@@ -1,6 +1,7 @@
 import express from "express";
 import type { ErrorRequestHandler } from "express";
 import type { Message } from "../src/types";
+import { tutorPrompt } from "../src/lib/prompt";
 
 export function createApp(fetcher: typeof fetch = fetch) {
   const app = express();
@@ -71,7 +72,9 @@ export function createApp(fetcher: typeof fetch = fetch) {
           messages: [
             {
               role: "system",
-              content: `你是一位耐心的日语老师。用户是中文母语的零基础学习者。当前场景：${typeof scenario === "string" ? scenario.slice(0, 100) : "日常交流"}。用简短、自然的初级日语对话，附中文翻译，为难词提供假名。每次只问一个问题，温和纠正错误，必要时用中文解释。`,
+              content: tutorPrompt(
+                typeof scenario === "string" ? scenario : "日常交流",
+              ),
             },
             ...messages,
           ],
