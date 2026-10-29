@@ -1,4 +1,4 @@
-package com.hiyori.japanese;
+package com.learnnew.app;
 
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
@@ -33,14 +33,14 @@ public class NativeLearningPlugin extends Plugin {
         String text = call.getString("text", "");
         if (!ready) { call.reject("日语语音未就绪，请在手机的文字转语音设置中安装日语语音包后重新打开应用。"); return; }
         getActivity().runOnUiThread(() -> {
-            int status = speech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "hiyori");
+            int status = speech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "learnnew");
             if (status == TextToSpeech.ERROR) call.reject("朗读失败，请检查手机的日语语音设置。"); else call.resolve();
         });
     }
 
     @PluginMethod public void backup(PluginCall call) {
         try {
-            File file = new File(getContext().getCacheDir(), "hiyori-progress.json");
+            File file = new File(getContext().getCacheDir(), "learnnew-progress.json");
             try (FileOutputStream output = new FileOutputStream(file)) {
                 output.write(call.getString("content", "{}").getBytes(StandardCharsets.UTF_8));
             }

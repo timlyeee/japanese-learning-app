@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SpeakerHigh, Plant } from "@phosphor-icons/react";
 import { words } from "../data/content";
 import { speak } from "../lib/speech";
 import type { Progress } from "../types";
@@ -24,7 +25,10 @@ export default function Words({
   if (!word)
     return (
       <div className="study-card">
-        <h1>本轮复习完成了 🌿</h1>
+        <div className="result-icon">
+          <Plant size={48} weight="regular" />
+        </div>
+        <h1>本轮复习完成了</h1>
         <p>到期的单词会自动重新出现。休息一下，也可以练习对话。</p>
         <button className="primary" onClick={chat}>
           用日语聊聊天
@@ -41,7 +45,7 @@ export default function Words({
         <span className="eyebrow">VOCABULARY PRACTICE</span>
         <div className="big-word">{word.text}</div>
         <button className="link" onClick={() => speak(word.text)}>
-          ♬ 听发音
+          <SpeakerHigh size={16} weight="regular" /> 听发音
         </button>
         <div className={`review-reveal ${revealed ? "" : "hidden"}`}>
           <p>

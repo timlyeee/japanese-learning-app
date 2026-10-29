@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { X, SpeakerHigh, Trophy, Plant } from "@phosphor-icons/react";
 import type { Level } from "../data/kana";
 import {
   buildQuestions,
@@ -55,7 +56,13 @@ export default function QuizSession({
   if (done)
     return (
       <section className="quiz-card result-card">
-        <div className="result-icon">{result.stars ? "✦" : "🌱"}</div>
+        <div className="result-icon">
+          {result.stars ? (
+            <Trophy size={48} weight="regular" />
+          ) : (
+            <Plant size={48} weight="regular" />
+          )}
+        </div>
         <span className="eyebrow">
           {practice ? "MISTAKE PRACTICE" : "LESSON COMPLETE"}
         </span>
@@ -121,7 +128,7 @@ export default function QuizSession({
           }}
           aria-label="退出本轮练习"
         >
-          ✕
+          <X size={20} weight="regular" />
         </button>
         <div className="progress">
           <span style={{ width: `${(index / questions.length) * 100}%` }} />
@@ -149,7 +156,7 @@ export default function QuizSession({
         )}
       </div>
       <button className="sound-button" onClick={() => speak(question.speak)}>
-        ♫ 听一听
+        <SpeakerHigh size={16} weight="regular" /> 听一听
       </button>
       <div className="answer-grid">
         {question.options.map((option, optionIndex) => (

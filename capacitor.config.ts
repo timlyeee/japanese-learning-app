@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.hiyori.japanese",
-  appName: "日和日语",
+  appId: "com.learnnew.app",
+  appName: "学点新的？",
   webDir: "dist",
   plugins: { CapacitorHttp: { enabled: true } },
 };

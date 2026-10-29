@@ -36,4 +36,11 @@ export interface Message {
   role: "user" | "assistant";
   content: string;
 }
+export type ModuleId = "japanese";
+export interface Module {
+  id: ModuleId;
+  name: string;
+  description: string;
+  symbol: string;
+}
 export type Page = "home" | "courses" | "kana" | "words" | "chat" | "settings";

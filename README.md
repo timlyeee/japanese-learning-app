@@ -1,4 +1,4 @@
-# 日和
+# 学点新的？
 
 React + Vite + TypeScript 前端，Express + TypeScript API。需要 Node.js 22.12+ 或 24+。
 
@@ -38,7 +38,7 @@ npm start
 
 设置页填写兼容 Chat Completions 的基础地址、模型、密钥，自动追加 `/chat/completions`。密钥只保存在内存中；刷新后重新填写。也可以复制 `.env.example` 为 `.env` 并设置 `AI_API_KEY`。不要给密钥使用 VITE_ 前缀或提交 .env。
 
-应用免费，提供商可能计费。对话和密钥发送至你配置的服务商，服务器不主动记录它们。进度沿用 `hiyori` 本地存储，支持导出及校验后导入。localhost 与 127.0.0.1 的浏览器存储相互独立，切换地址时可通过备份迁移。
+应用免费，提供商可能计费。对话和密钥发送至你配置的服务商，服务器不主动记录它们。进度沿用 `learnnew` 本地存储，支持导出及校验后导入。localhost 与 127.0.0.1 的浏览器存储相互独立，切换地址时可通过备份迁移。
 
 服务只监听本机。支持自定义地址和本机模型，请勿直接公开到公网。公网部署需增加身份验证、上游白名单、配额及限流。
 
@@ -73,7 +73,7 @@ Windows 构建需要 Java 21、Android SDK API 36 和 Build Tools 36.0.0。脚�
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-android.ps1 -SdkPath D:\SDK\Android -JavaPath D:\SDK\Java\jdk21.0.13_0
 ```
 
-安装包输出为 `artifacts/hiyori-learning-android.apk`，使用本机调试签名，适合直接安装学习，不能视为商店发布版。升级需保持包名和签名不变；卸载会清除本地进度，建议先导出备份。
+安装包输出为 `artifacts/learnnew-android.apk`，使用本机调试签名，适合直接安装学习，不能视为商店发布版。升级需保持包名和签名不变；卸载会清除本地进度，建议先导出备份。
 
 手机端直接通过原生 HTTPS 请求连接设置中的 AI 服务，不访问电脑 localhost，不需要电脑常开。需要在手机设置页填写密钥。发音使用手机原生 TTS；若提示缺少日语语音，需要在系统文字转语音设置安装日语语音包。备份通过系统分享菜单保存，网页与手机进度可通过 JSON 导出、导入迁移。
 

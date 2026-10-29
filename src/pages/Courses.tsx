@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SpeakerHigh } from "@phosphor-icons/react";
 import { courses } from "../data/content";
 import { speak } from "../lib/speech";
 export default function Courses({
@@ -64,7 +65,7 @@ export default function Courses({
             )
           }
         >
-          ♬ 听日语示范
+          <SpeakerHigh size={16} weight="regular" /> 听日语示范
         </button>
         <p className="notice">{course.grammar}</p>
         <h3>{course.question}</h3>

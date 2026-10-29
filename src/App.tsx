@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "./components/Layout";
+import ModuleSelect from "./components/ModuleSelect";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Kana from "./pages/Kana";
@@ -12,13 +13,14 @@ import {
   STORAGE_KEY,
   withActivity,
 } from "./lib/progress";
-import type { Page } from "./types";
+import type { ModuleId, Page } from "./types";
 export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [selected, setSelected] = useState<number | null>(null);
   const [progress, setProgress] = useState(loadProgress);
   const [apiKey, setApiKey] = useState("");
   const [storageError, setStorageError] = useState("");
+  const [module, setModule] = useState<ModuleId | null>(null);
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
@@ -36,8 +38,22 @@ export default function App() {
     setSelected(id);
     setPage("courses");
   }
+  if (module === null)
+    return (
+      <ModuleSelect
+        onSelect={(id) => {
+          setModule(id);
+          setPage("home");
+        }}
+      />
+    );
   return (
-    <Layout page={page} navigate={navigate} days={progress.days.length}>
+    <Layout
+      page={page}
+      navigate={navigate}
+      days={progress.days.length}
+      onBack={() => setModule(null)}
+    >
       {storageError && (
         <p role="alert" className="notice error">
           {storageError}

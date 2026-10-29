@@ -21,7 +21,7 @@ const port = Number(
 const server = app.listen(port, "127.0.0.1", () =>
   console.log(
     production
-      ? `日和：http://127.0.0.1:${port}`
+      ? `学点新的？：http://127.0.0.1:${port}`
       : `API：http://127.0.0.1:${port}/api/health`,
   ),
 );

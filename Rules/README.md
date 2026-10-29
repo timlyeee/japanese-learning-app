@@ -10,6 +10,7 @@
 | -------------------------------------------------- | ------------------------------------- |
 | [000-project-workflow.md](000-project-workflow.md) | 所有项目修改、验证和交付              |
 | [100-code-style.md](100-code-style.md)             | 修改 TypeScript、React、CSS 或 Java   |
+| [110-ui-design.md](110-ui-design.md)               | 修改界面视觉、配色、字体、图标或交互  |
 | [200-learning-content.md](200-learning-content.md) | 修改假名、课程、题库、评分和存储      |
 | [210-android-api.md](210-android-api.md)           | 修改 Android、原生能力、AI 请求或打包 |
 

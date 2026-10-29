@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sparkle, LockSimple, Check } from "@phosphor-icons/react";
 import {
   kana,
   kanaWords,
@@ -146,7 +147,9 @@ export default function Kana({
       {view === "path" ? (
         <>
           <div className="path-summary">
-            <span>✦</span>
+            <span>
+              <Sparkle size={22} weight="regular" />
+            </span>
             <div>
               <strong>
                 {script === "hiragana" ? "平假名" : "片假名"}基础之旅
@@ -167,11 +170,13 @@ export default function Kana({
                 >
                   <div className="level-top">
                     <span className="level-number">
-                      {result?.stars
-                        ? "✓"
-                        : unlocked
-                          ? String(index + 1).padStart(2, "0")
-                          : "⌑"}
+                      {result?.stars ? (
+                        <Check size={18} weight="regular" />
+                      ) : unlocked ? (
+                        String(index + 1).padStart(2, "0")
+                      ) : (
+                        <LockSimple size={18} weight="regular" />
+                      )}
                     </span>
                     <span className="level-state">
                       {result?.stars

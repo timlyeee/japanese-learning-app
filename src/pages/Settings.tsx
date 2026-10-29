@@ -31,7 +31,7 @@ export default function Settings({
     );
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "日和-学习进度.json";
+    anchor.download = "学点新的-学习进度.json";
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

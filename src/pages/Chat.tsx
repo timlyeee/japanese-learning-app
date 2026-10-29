@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { PaperPlaneRight } from "@phosphor-icons/react";
 import { scenarios } from "../data/content";
 import { requestChat } from "../lib/api";
 import type { ApiConfig, Message } from "../types";
@@ -98,7 +99,13 @@ export default function Chat({
               disabled={busy}
             />
             <button className="primary" disabled={busy}>
-              {busy ? "思考中…" : "发送 ↗"}
+              {busy ? (
+                "思考中…"
+              ) : (
+                <>
+                  发送 <PaperPlaneRight size={16} weight="regular" />
+                </>
+              )}
             </button>
           </form>
         </div>

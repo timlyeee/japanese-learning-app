@@ -1,3 +1,12 @@
+import type { ReactNode } from "react";
+import {
+  CalendarCheck,
+  BookOpen,
+  CheckCircle,
+  Repeat,
+  Plant,
+  SpeakerHigh,
+} from "@phosphor-icons/react";
 import { courses, words } from "../data/content";
 import CourseCard from "../components/CourseCard";
 import { speak } from "../lib/speech";
@@ -15,11 +24,26 @@ export default function Home({
     (w) => !progress.reviews[w.id] || progress.reviews[w.id].due <= Date.now(),
   ).length;
   const next = courses.find((c) => !progress.done.includes(c.id));
-  const stats = [
-    ["◷", progress.days.length, "天", "累计学习"],
-    ["あ", Object.keys(progress.reviews).length, "个", "已学习单词"],
-    ["▤", progress.done.length, "课", "已完成课程"],
-    ["↻", due, "个", "今日待复习"],
+  const stats: [ReactNode, number, string, string][] = [
+    [
+      <CalendarCheck size={22} weight="regular" />,
+      progress.days.length,
+      "天",
+      "累计学习",
+    ],
+    [
+      <BookOpen size={22} weight="regular" />,
+      Object.keys(progress.reviews).length,
+      "个",
+      "已学习单词",
+    ],
+    [
+      <CheckCircle size={22} weight="regular" />,
+      progress.done.length,
+      "课",
+      "已完成课程",
+    ],
+    [<Repeat size={22} weight="regular" />, due, "个", "今日待复习"],
   ];
   return (
     <>
@@ -54,7 +78,9 @@ export default function Home({
         <div className="hero-art" aria-hidden="true">
           <div className="sun" />
           <div className="hill" />
-          <div className="plant">🌿</div>
+          <div className="plant">
+            <Plant size={120} weight="regular" />
+          </div>
           <div className="japanese-art">日々、少しずつ。</div>
         </div>
       </section>
@@ -94,7 +120,7 @@ export default function Home({
             <div className="section-head">
               <h3>每日一词</h3>
               <button className="link" onClick={() => speak("木漏れ日")}>
-                ♬ 发音
+                <SpeakerHigh size={16} weight="regular" /> 发音
               </button>
             </div>
             <div className="word-day">

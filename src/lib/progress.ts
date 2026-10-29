@@ -1,5 +1,5 @@
 import type { Progress, Review } from "../types";
-export const STORAGE_KEY = "hiyori";
+export const STORAGE_KEY = "learnnew";
 export const initialProgress = (): Progress => ({
   quiz: {},
   done: [],

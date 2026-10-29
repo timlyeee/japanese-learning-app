@@ -1,4 +1,4 @@
-package com.hiyori.japanese;
+package com.learnnew.app;
 
 import com.getcapacitor.BridgeActivity;
 import android.os.Bundle;
