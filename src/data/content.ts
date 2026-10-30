@@ -1,4 +1,7 @@
 import type { Word, Course } from "../types";
+import { parseCourses } from "../lib/courses";
+import coursesData from "./courses.json";
+
 export const words: Word[] = [
   {
     id: 0,
@@ -161,92 +164,10 @@ export const words: Word[] = [
     translation: "请慢一点说。",
   },
 ];
-export const courses: Course[] = [
-  {
-    id: 0,
-    title: "初次见面",
-    description: "从一句问候开始认识彼此",
-    symbol: "挨拶",
-    dialogue:
-      "A：はじめまして。私は田中です。\n初次见面，我是田中。\nB：私は李です。よろしくお願いします。\n我是小李，请多关照。",
-    grammar: "「私は…です」表示“我是……”。は作助词时读 wa，です是礼貌的句尾。",
-    question: "“我是小李”用日语怎么说？",
-    options: ["私は李です。", "李をください。", "李はどこですか。"],
-    answer: 0,
-  },
-  {
-    id: 1,
-    title: "我的日常",
-    description: "介绍生活与日常安排",
-    symbol: "日常",
-    dialogue:
-      "毎朝、七時に起きます。\n每天早上七点起床。\nパンを食べます。\n吃面包。",
-    grammar:
-      "「时间＋に」表示动作发生的时间；「名词＋を＋动词」表示动作的对象。",
-    question: "选择“我喝水”。",
-    options: ["水に行きます。", "水を飲みます。", "水はどこですか。"],
-    answer: 1,
-  },
-  {
-    id: 2,
-    title: "在咖啡店",
-    description: "轻松点单与表达需求",
-    symbol: "珈琲",
-    dialogue:
-      "A：ご注文は？\n您要点什么？\nB：コーヒーを一つください。\n请给我一杯咖啡。\nA：かしこまりました。\n好的。",
-    grammar:
-      "「…をください」用于礼貌索取；一つ（ひとつ）是“一个”的通用计数表达。",
-    question: "如何说“请给我水”？",
-    options: ["水ですか。", "水が好きです。", "水をください。"],
-    answer: 2,
-  },
-  {
-    id: 3,
-    title: "城市探索",
-    description: "问路、出行与交通",
-    symbol: "旅",
-    dialogue:
-      "A：すみません、駅はどこですか。\n劳驾，车站在哪里？\nB：まっすぐ行って、右に曲がってください。\n请直走，然后右转。",
-    grammar:
-      "「…はどこですか」用于询问位置；「…てください」用于礼貌请求别人做某事。",
-    question: "哪句是在问车站在哪里？",
-    options: ["駅はどこですか。", "駅が好きです。", "駅に行きます。"],
-    answer: 0,
-  },
-  {
-    id: 4,
-    title: "聊聊喜好",
-    description: "发现彼此的共同兴趣",
-    symbol: "好き",
-    dialogue:
-      "A：何が好きですか。\n你喜欢什么？\nB：音楽が好きです。\n我喜欢音乐。",
-    grammar: "「名词＋が好きです」表示喜欢某物；何（なに）是“什么”。",
-    question: "“我喜欢日语”应该怎么说？",
-    options: [
-      "日本語をください。",
-      "日本語が好きです。",
-      "日本語はどこですか。",
-    ],
-    answer: 1,
-  },
-  {
-    id: 5,
-    title: "约个时间",
-    description: "邀请朋友，约定下一次见面",
-    symbol: "約束",
-    dialogue:
-      "A：土曜日、一緒に映画を見ませんか。\n周六一起看电影吗？\nB：いいですね。何時ですか。\n好呀，几点？",
-    grammar:
-      "「动词ます形去ます＋ませんか」用于礼貌邀请；一緒に（いっしょに）表示“一起”。",
-    question: "哪句可以邀请朋友一起去？",
-    options: [
-      "一緒に行きませんか。",
-      "もう一度お願いします。",
-      "私は学生です。",
-    ],
-    answer: 0,
-  },
-];
+
+export const courses: Course[] = parseCourses(coursesData);
+export const allCourseCards = courses.flatMap((course) => course.cards);
+
 export const kanaRows: [string, string, string][] = [
   ["あいうえお", "アイウエオ", "a i u e o"],
   ["かきくけこ", "カキクケコ", "ka ki ku ke ko"],
@@ -264,4 +185,5 @@ export const kanaRows: [string, string, string][] = [
   ["ばびぶべぼ", "バビブベボ", "ba bi bu be bo"],
   ["ぱぴぷぺぽ", "パピプペポ", "pa pi pu pe po"],
 ];
+
 export const scenarios = ["自由聊天", "咖啡店点单", "问路与出行", "自我介绍"];

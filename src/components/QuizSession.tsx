@@ -1,24 +1,22 @@
 import { useRef, useState } from "react";
 import { X, SpeakerHigh, Trophy, Plant } from "@phosphor-icons/react";
-import type { Level } from "../data/kana";
-import {
-  buildQuestions,
-  resultFor,
-  type Question,
-  type QuizResult,
-} from "../lib/quiz";
+import { resultFor, type Question, type QuizResult } from "../lib/quiz";
 import { speak } from "../lib/speech";
 
 export default function QuizSession({
-  level,
+  title,
+  subtitle,
+  rebuild,
   finish,
   exit,
 }: {
-  level: Level;
+  title: string;
+  subtitle: string;
+  rebuild: () => Question[];
   finish: (result: QuizResult) => void;
   exit: () => void;
 }) {
-  const [questions, setQuestions] = useState(() => buildQuestions(level));
+  const [questions, setQuestions] = useState(rebuild);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -31,7 +29,7 @@ export default function QuizSession({
   const result = resultFor(score, questions.length);
 
   function restart(onlyMistakes: boolean) {
-    setQuestions(onlyMistakes ? mistakes : buildQuestions(level));
+    setQuestions(onlyMistakes ? mistakes : rebuild());
     setIndex(0);
     setSelected(null);
     setScore(0);
@@ -138,8 +136,7 @@ export default function QuizSession({
         </span>
       </div>
       <span className="eyebrow">
-        {practice ? "错题巩固" : level.title} ·{" "}
-        {level.script === "hiragana" ? "平假名" : "片假名"}
+        {practice ? "错题巩固" : title} · {subtitle}
       </span>
       <h2 className="question-title">{question.hint}</h2>
       <div

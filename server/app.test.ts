@@ -29,6 +29,12 @@ describe("API 服务", () => {
       headers: { "Content-Type": "application/json", ...headers },
       body: JSON.stringify(body),
     });
+  const postCards = (body: unknown, headers = {}) =>
+    fetch(base + "/api/cards", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...headers },
+      body: JSON.stringify(body),
+    });
   it("提供健康检查", async () => {
     expect(await (await fetch(base + "/api/health")).json()).toEqual({
       status: "ok",
@@ -88,5 +94,51 @@ describe("API 服务", () => {
   it("捕获不兼容的AI响应", async () => {
     upstream.mockResolvedValueOnce(new Response("{}"));
     expect((await post(payload)).status).toBe(502);
+  });
+  it("卡片接口解析并返回卡片", async () => {
+    upstream.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify([
+                  {
+                    kind: "word",
+                    front: "猫",
+                    back: "猫",
+                    reading: "neko",
+                    example: "猫が好きです。",
+                  },
+                ]),
+              },
+            },
+          ],
+        }),
+      ),
+    );
+    const response = await postCards({ ...payload, topic: "动物" });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      cards: [
+        {
+          id: "ai-0",
+          kind: "word",
+          front: "猫",
+          back: "猫",
+          reading: "neko",
+          example: "猫が好きです。",
+        },
+      ],
+    });
+  });
+  it("卡片接口拒绝非法主题与上游坏格式", async () => {
+    expect((await postCards({ ...payload, topic: "" })).status).toBe(400);
+    upstream.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({ choices: [{ message: { content: "not-json" } }] }),
+      ),
+    );
+    expect((await postCards({ ...payload, topic: "动物" })).status).toBe(502);
   });
 });

@@ -3,36 +3,55 @@ import { Sparkle, LockSimple, Check } from "@phosphor-icons/react";
 import {
   kana,
   kanaWords,
+  katakanaOrigins,
   levelsFor,
   type Level,
   type Script,
 } from "../data/kana";
 import { speak } from "../lib/speech";
-import { isUnlocked, type QuizResult } from "../lib/quiz";
+import { buildQuestions, isUnlocked, type QuizResult } from "../lib/quiz";
+import { useBack } from "../lib/back";
 import QuizSession from "../components/QuizSession";
+import type { KanaCardTarget } from "../data/knowledgeCards";
 
 export default function Kana({
+  initialTarget,
   activity,
   results,
   finish,
 }: {
+  initialTarget?: KanaCardTarget | null;
   activity: () => void;
   results: Record<string, QuizResult>;
   finish: (id: string, result: QuizResult) => void;
 }) {
-  const [script, setScript] = useState<Script>("hiragana");
+  const [script, setScript] = useState<Script>(
+    initialTarget?.script ?? "hiragana",
+  );
   const [view, setView] = useState<"path" | "chart">("path");
-  const [selected, setSelected] = useState<Level | null>(null);
+  const [selected, setSelected] = useState<Level | null>(() =>
+    initialTarget
+      ? (levelsFor(initialTarget.script).find(
+          (level) => level.id === initialTarget.levelId,
+        ) ?? null)
+      : null,
+  );
   const [started, setStarted] = useState(false);
   const levels = levelsFor(script);
   const completed = levels.filter(
     (level) => results[level.id]?.stars > 0,
   ).length;
+  useBack(selected ? (started ? 3 : 2) : 0, () => {
+    if (started) setStarted(false);
+    else setSelected(null);
+  });
   if (selected && started)
     return (
       <QuizSession
         key={selected.id}
-        level={selected}
+        title={selected.title}
+        subtitle={script === "hiragana" ? "平假名" : "片假名"}
+        rebuild={() => buildQuestions(selected)}
         finish={(result) => finish(selected.id, result)}
         exit={() => {
           setSelected(null);
@@ -50,10 +69,14 @@ export default function Kana({
           {script === "hiragana" ? "あ" : "ア"}
         </span>
         <h1>{selected.title}</h1>
-        <p className="muted">先认识这一关的内容，再开始 10 道小测试。</p>
+        <p className="muted">先认识这一关的内容，再开始 15 道小测试。</p>
         <div
           className={
-            selected.kind === "word" ? "word-preview-grid" : "kana-grid"
+            selected.kind === "word"
+              ? "word-preview-grid"
+              : script === "katakana"
+                ? "kana-story-grid"
+                : "kana-grid"
           }
         >
           {selected.kind === "word"
@@ -74,22 +97,44 @@ export default function Kana({
                 ))
             : kana
                 .filter((k) => selected.rows.includes(k.row))
-                .map((k) => (
-                  <button
-                    className="kana"
-                    key={k.hiragana}
-                    onClick={() => speak(k[script])}
-                  >
-                    {k[script]}
-                    <small>{k.reading}</small>
-                  </button>
-                ))}
+                .map((k) => {
+                  const origin =
+                    script === "katakana"
+                      ? katakanaOrigins[k[script]]
+                      : undefined;
+                  return origin ? (
+                    <div className="kana-story" key={k.hiragana}>
+                      <button
+                        className="kana-story-glyph"
+                        onClick={() => speak(k[script])}
+                      >
+                        {k[script]}
+                        <small>{k.reading}</small>
+                      </button>
+                      <div className="kana-story-body">
+                        <strong>源自「{origin.source}」</strong>
+                        <p>{origin.story}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      className="kana"
+                      key={k.hiragana}
+                      onClick={() => speak(k[script])}
+                    >
+                      {k[script]}
+                      <small>{k.reading}</small>
+                    </button>
+                  );
+                })}
         </div>
         <p className="notice">
           {selected.kind === "word"
             ? "注音使用罗马音。长音符号 ō / ī 表示多读一拍；外来语常用片假名书写。"
-            : "两种题型交替练习：读音选假名、假名选读音。点击卡片可听发音。"}
-          　答对 8 题即可过关。
+            : script === "katakana"
+              ? "片假名侧重「看字形选读音」。先读一读每个字的起源故事，再开始挑战。点击卡片可听发音。"
+              : "两种题型交替练习：读音选假名、假名选读音。点击卡片可听发音。"}
+          　答对 12 题即可过关。
         </p>
         <button
           className="primary"
@@ -108,7 +153,7 @@ export default function Kana({
         <div>
           <span className="eyebrow">SMALL STEPS, REAL PROGRESS</span>
           <h1>从五十音，开启冒险。</h1>
-          <p className="muted">认一个音，闯一小关。每次十题，慢慢学会。</p>
+          <p className="muted">认一个音，闯一小关。每次十五题，慢慢学会。</p>
         </div>
         <div className="completion-chip">
           {completed} / {levels.length} 关已完成
@@ -154,7 +199,10 @@ export default function Kana({
               <strong>
                 {script === "hiragana" ? "平假名" : "片假名"}基础之旅
               </strong>
-              <p>7 关读音练习 + 1 关词语理解 · 80% 正确率解锁下一关</p>
+              <p>
+                {levels.length - 1} 关读音练习 + 1 关词语理解 · 80%
+                正确率解锁下一关
+              </p>
             </div>
           </div>
           <div className="level-grid">

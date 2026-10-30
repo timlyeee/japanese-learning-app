@@ -1,7 +1,14 @@
-import { kana, kanaWords, type Level } from "../data/kana";
+import { kana, kanaWords, katakanaOrigins, type Level } from "../data/kana";
+import type { Card } from "../types";
 export interface Question {
   id: string;
-  kind: "sound-to-kana" | "kana-to-sound" | "word";
+  kind:
+    | "sound-to-kana"
+    | "kana-to-sound"
+    | "word"
+    | "card-meaning"
+    | "card-reading"
+    | "card-choice";
   prompt: string;
   hint: string;
   reading?: string;
@@ -59,14 +66,17 @@ export function buildQuestions(level: Level, random = Math.random): Question[] {
     kana.filter((k) => level.rows.includes(k.row)),
     random,
   );
-  return Array.from({ length: 10 }, (_, index) => {
-    const target = targets[Math.floor(index / 2) % targets.length];
+  return Array.from({ length: 15 }, (_, index) => {
+    const target = targets[index % targets.length];
     const text = target[level.script];
-    const soundToKana = index % 2 === 0;
+    const soundToKana =
+      level.script === "katakana" ? index % 4 === 3 : index % 2 === 0;
     const answer = soundToKana ? text : target.reading;
     const pool = kana
       .filter((k) => k.reading !== target.reading)
       .map((k) => (soundToKana ? k[level.script] : k.reading));
+    const origin =
+      level.script === "katakana" ? katakanaOrigins[text] : undefined;
     return {
       id: `${level.id}-${index}`,
       kind: soundToKana ? "sound-to-kana" : "kana-to-sound",
@@ -75,9 +85,78 @@ export function buildQuestions(level: Level, random = Math.random): Question[] {
       speak: text,
       answer,
       options: choices(answer, pool, random),
-      explanation: `${target.hiragana} / ${target.katakana} 的读音是 ${target.reading}。`,
+      explanation: origin
+        ? `${target.hiragana} / ${target.katakana} 的读音是 ${target.reading}。${text} 来自汉字「${origin.source}」：${origin.story}`
+        : `${target.hiragana} / ${target.katakana} 的读音是 ${target.reading}。`,
     };
   });
+}
+
+function strings(items: (string | undefined)[]): string[] {
+  return items.filter((item): item is string => typeof item === "string");
+}
+
+export function questionsFromCards(
+  cards: Card[],
+  pool: Card[] = cards,
+  random = Math.random,
+): Question[] {
+  const questions: Question[] = [];
+  for (const card of cards) {
+    questions.push({
+      id: `${card.id}-meaning`,
+      kind: "card-meaning",
+      prompt: card.front,
+      hint:
+        card.kind === "grammar"
+          ? "这个句型表示什么？"
+          : card.kind === "dialogue"
+            ? "这句话是什么意思？"
+            : "这个词是什么意思？",
+      speak: card.example ?? card.front,
+      answer: card.back,
+      options: choices(card.back, strings(pool.map((c) => c.back)), random),
+      explanation: card.note
+        ? `「${card.front}」的意思是「${card.back}」。${card.note}`
+        : `「${card.front}」的意思是「${card.back}」。`,
+    });
+    if (card.reading) {
+      questions.push({
+        id: `${card.id}-reading`,
+        kind: "card-reading",
+        prompt: card.front,
+        hint: "这个读音（罗马音）是什么？",
+        speak: card.front,
+        answer: card.reading,
+        options: choices(
+          card.reading,
+          strings(pool.map((c) => c.reading)),
+          random,
+        ),
+        explanation: `「${card.front}」读作 ${card.reading}。`,
+      });
+    }
+    if (card.example) {
+      questions.push({
+        id: `${card.id}-example`,
+        kind: "card-choice",
+        prompt: card.front,
+        hint:
+          card.kind === "grammar"
+            ? "哪个例句正确体现了这个句型？"
+            : "哪个例句正确使用了这个词？",
+        speak: card.example,
+        answer: card.example,
+        options: choices(
+          card.example,
+          strings(pool.map((c) => c.example)),
+          random,
+        ),
+        explanation: `「${card.example}」${card.exampleMeaning ? `（${card.exampleMeaning}）` : ""}。`,
+      });
+    }
+  }
+  return shuffle(questions, random);
 }
 export function resultFor(correct: number, total: number): QuizResult {
   const ratio = total ? correct / total : 0;

@@ -1,0 +1,238 @@
+[
+  {
+    "id": 0,
+    "title": "初次见面",
+    "description": "从一句问候开始认识彼此",
+    "symbol": "挨拶",
+    "dialogue": "A：はじめまして。私は田中です。\n初次见面，我是田中。\nB：私は李です。よろしくお願いします。\n我是小李，请多关照。",
+    "grammar": "「私は…です」表示“我是……”。は作助词时读 wa，です是礼貌的句尾。",
+    "cards": [
+      {
+        "kind": "dialogue",
+        "front": "はじめまして。",
+        "back": "初次见面。",
+        "reading": "hajimemashite",
+        "example": "はじめまして。私は田中です。",
+        "exampleMeaning": "初次见面，我是田中。"
+      },
+      {
+        "kind": "grammar",
+        "front": "私は…です",
+        "back": "我是……",
+        "note": "は 作助词读 wa，です 是礼貌句尾。",
+        "example": "私は学生です。",
+        "exampleMeaning": "我是学生。"
+      },
+      {
+        "kind": "grammar",
+        "front": "よろしくお願いします。",
+        "back": "请多关照。",
+        "reading": "yoroshiku onegaishimasu",
+        "example": "私は李です。よろしくお願いします。",
+        "exampleMeaning": "我是小李，请多关照。"
+      },
+      {
+        "kind": "word",
+        "front": "私",
+        "back": "我",
+        "reading": "わたし · watashi",
+        "example": "私は李です。",
+        "exampleMeaning": "我是小李。"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "我的日常",
+    "description": "介绍生活与日常安排",
+    "symbol": "日常",
+    "dialogue": "毎朝、七時に起きます。\n每天早上七点起床。\nパンを食べます。\n吃面包。",
+    "grammar": "「时间＋に」表示动作发生的时间；「名词＋を＋动词」表示动作的对象。",
+    "cards": [
+      {
+        "kind": "word",
+        "front": "起きます",
+        "back": "起床",
+        "reading": "おきます · okimasu",
+        "example": "毎朝、七時に起きます。",
+        "exampleMeaning": "每天早上七点起床。"
+      },
+      {
+        "kind": "word",
+        "front": "食べます",
+        "back": "吃",
+        "reading": "たべます · tabemasu",
+        "example": "パンを食べます。",
+        "exampleMeaning": "吃面包。"
+      },
+      {
+        "kind": "grammar",
+        "front": "时间＋に＋动词",
+        "back": "在（某时间）做某事",
+        "note": "に 接在时间后，表示动作发生的时间。",
+        "example": "七時に起きます。",
+        "exampleMeaning": "七点起床。"
+      },
+      {
+        "kind": "word",
+        "front": "パン",
+        "back": "面包",
+        "reading": "pan",
+        "example": "パンを食べます。",
+        "exampleMeaning": "吃面包。"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "在咖啡店",
+    "description": "轻松点单与表达需求",
+    "symbol": "珈琲",
+    "dialogue": "A：ご注文は？\n您要点什么？\nB：コーヒーを一つください。\n请给我一杯咖啡。\nA：かしこまりました。\n好的。",
+    "grammar": "「…をください」用于礼貌索取；一つ（ひとつ）是“一个”的通用计数表达。",
+    "cards": [
+      {
+        "kind": "dialogue",
+        "front": "ご注文は？",
+        "back": "您要点什么？",
+        "reading": "gochūmon wa?",
+        "example": "ご注文は？",
+        "exampleMeaning": "您要点什么？"
+      },
+      {
+        "kind": "grammar",
+        "front": "…をください",
+        "back": "请给我……",
+        "note": "用于礼貌地索取某物。",
+        "example": "コーヒーを一つください。",
+        "exampleMeaning": "请给我一杯咖啡。"
+      },
+      {
+        "kind": "word",
+        "front": "一つ",
+        "back": "一个",
+        "reading": "ひとつ · hitotsu",
+        "example": "コーヒーを一つください。",
+        "exampleMeaning": "请给我一杯咖啡。"
+      },
+      {
+        "kind": "dialogue",
+        "front": "かしこまりました。",
+        "back": "好的（我知道了）。",
+        "reading": "kashikomarimashita",
+        "example": "かしこまりました。",
+        "exampleMeaning": "好的。"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "城市探索",
+    "description": "问路、出行与交通",
+    "symbol": "旅",
+    "dialogue": "A：すみません、駅はどこですか。\n劳驾，车站在哪里？\nB：まっすぐ行って、右に曲がってください。\n请直走，然后右转。",
+    "grammar": "「…はどこですか」用于询问位置；「…てください」用于礼貌请求别人做某事。",
+    "cards": [
+      {
+        "kind": "word",
+        "front": "駅",
+        "back": "车站",
+        "reading": "えき · eki",
+        "example": "駅はどこですか。",
+        "exampleMeaning": "车站在哪里？"
+      },
+      {
+        "kind": "grammar",
+        "front": "…はどこですか",
+        "back": "……在哪里？",
+        "note": "用于询问位置。",
+        "example": "駅はどこですか。",
+        "exampleMeaning": "车站在哪里？"
+      },
+      {
+        "kind": "grammar",
+        "front": "…てください",
+        "back": "请（做某事）",
+        "note": "礼貌地请求别人做某事。",
+        "example": "右に曲がってください。",
+        "exampleMeaning": "请右转。"
+      },
+      {
+        "kind": "word",
+        "front": "まっすぐ",
+        "back": "笔直地",
+        "reading": "massugu",
+        "example": "まっすぐ行ってください。",
+        "exampleMeaning": "请直走。"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "聊聊喜好",
+    "description": "发现彼此的共同兴趣",
+    "symbol": "好き",
+    "dialogue": "A：何が好きですか。\n你喜欢什么？\nB：音楽が好きです。\n我喜欢音乐。",
+    "grammar": "「名词＋が好きです」表示喜欢某物；何（なに）是“什么”。",
+    "cards": [
+      {
+        "kind": "grammar",
+        "front": "…が好きです",
+        "back": "喜欢……",
+        "note": "名词＋が好きです 表示喜欢某物。",
+        "example": "音楽が好きです。",
+        "exampleMeaning": "我喜欢音乐。"
+      },
+      {
+        "kind": "word",
+        "front": "何",
+        "back": "什么",
+        "reading": "なに · nani",
+        "example": "何が好きですか。",
+        "exampleMeaning": "你喜欢什么？"
+      },
+      {
+        "kind": "word",
+        "front": "音楽",
+        "back": "音乐",
+        "reading": "おんがく · ongaku",
+        "example": "音楽が好きです。",
+        "exampleMeaning": "我喜欢音乐。"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "约个时间",
+    "description": "邀请朋友，约定下一次见面",
+    "symbol": "約束",
+    "dialogue": "A：土曜日、一緒に映画を見ませんか。\n周六一起看电影吗？\nB：いいですね。何時ですか。\n好呀，几点？",
+    "grammar": "「动词ます形去ます＋ませんか」用于礼貌邀请；一緒に（いっしょに）表示“一起”。",
+    "cards": [
+      {
+        "kind": "grammar",
+        "front": "…ませんか",
+        "back": "（一起）……好吗？",
+        "note": "动词ます形去ます＋ませんか 用于礼貌邀请。",
+        "example": "映画を見ませんか。",
+        "exampleMeaning": "一起看电影吗？"
+      },
+      {
+        "kind": "word",
+        "front": "一緒に",
+        "back": "一起",
+        "reading": "いっしょに · issho ni",
+        "example": "一緒に行きませんか。",
+        "exampleMeaning": "一起去吧？"
+      },
+      {
+        "kind": "word",
+        "front": "何時",
+        "back": "几点",
+        "reading": "なんじ · nanji",
+        "example": "何時ですか。",
+        "exampleMeaning": "几点？"
+      }
+    ]
+  }
+]

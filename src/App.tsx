@@ -13,6 +13,11 @@ import {
   STORAGE_KEY,
   withActivity,
 } from "./lib/progress";
+import { initBackButton, useBack } from "./lib/back";
+import {
+  knowledgeCardTargets,
+  type KanaCardTarget,
+} from "./data/knowledgeCards";
 import type { ModuleId, Page } from "./types";
 export default function App() {
   const [page, setPage] = useState<Page>("home");
@@ -21,6 +26,7 @@ export default function App() {
   const [apiKey, setApiKey] = useState("");
   const [storageError, setStorageError] = useState("");
   const [module, setModule] = useState<ModuleId | null>(null);
+  const [kanaTarget, setKanaTarget] = useState<KanaCardTarget | null>(null);
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
@@ -29,14 +35,22 @@ export default function App() {
       setStorageError("浏览器无法保存进度，请导出备份并检查存储空间。");
     }
   }, [progress]);
+  useEffect(() => initBackButton(), []);
+  useBack(module === null ? 0 : 1, () => {
+    if (page === "home") setModule(null);
+    else navigate("home");
+  });
   const activity = () => setProgress((p) => withActivity(p));
   function navigate(next: Page) {
+    if (next === "kana") setKanaTarget(null);
     setPage(next);
     if (next === "courses") setSelected(null);
   }
-  function openCourse(id: number) {
-    setSelected(id);
-    setPage("courses");
+  function openKnowledgeCard(cardId: string) {
+    const target = knowledgeCardTargets.get(cardId);
+    if (!target) return;
+    setKanaTarget(target);
+    setPage("kana");
   }
   if (module === null)
     return (
@@ -60,7 +74,11 @@ export default function App() {
         </p>
       )}
       {page === "home" && (
-        <Home progress={progress} navigate={navigate} openCourse={openCourse} />
+        <Home
+          progress={progress}
+          navigate={navigate}
+          openKnowledgeCard={openKnowledgeCard}
+        />
       )}
       {page === "courses" && (
         <Courses
@@ -79,6 +97,8 @@ export default function App() {
       )}
       {page === "kana" && (
         <Kana
+          key={kanaTarget?.levelId ?? "kana-root"}
+          initialTarget={kanaTarget}
           activity={activity}
           results={progress.quiz}
           finish={(id, result) =>

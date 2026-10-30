@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { PaperPlaneRight } from "@phosphor-icons/react";
 import { scenarios } from "../data/content";
 import { requestChat } from "../lib/api";
+import CardGenerator from "../components/CardGenerator";
 import type { ApiConfig, Message } from "../types";
 export default function Chat({
   config,
@@ -17,6 +18,7 @@ export default function Chat({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"chat" | "cards">("chat");
   const controller = useRef<AbortController | null>(null);
   const list = useRef<HTMLDivElement>(null);
   useEffect(() => () => controller.current?.abort(), []);
@@ -56,67 +58,89 @@ export default function Chat({
     <>
       <h1>说得慢一点，也没关系。</h1>
       <p className="muted">你的日语陪练伙伴 · 练习真实场景，获得中文讲解</p>
-      <div className="chat-layout">
-        <div className="scenarios">
-          {scenarios.map((scene) => (
-            <button
-              key={scene}
-              disabled={busy}
-              className={`scenario ${scene === scenario ? "selected" : ""}`}
-              onClick={() => {
-                setScenario(scene);
-                setMessages([]);
-                setError("");
-              }}
-            >
-              {scene}
-            </button>
-          ))}
-        </div>
-        <div className="chat-box">
-          <div className="messages" ref={list} aria-live="polite">
-            <div className="bubble">
-              こんにちは！一起练习「{scenario}」吧。
-              <br />
-              你可以用日语开场，也可以用中文问我怎么表达。
-            </div>
-            {messages.map((message, i) => (
-              <div
-                key={i}
-                className={`bubble ${message.role === "user" ? "user" : ""}`}
-              >
-                {message.content}
-              </div>
-            ))}
-          </div>
-          <form className="chat-input" onSubmit={send}>
-            <input
-              aria-label="对话内容"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="试着说：こんにちは！"
-              maxLength={2000}
-              disabled={busy}
-            />
-            <button className="primary" disabled={busy}>
-              {busy ? (
-                "思考中…"
-              ) : (
-                <>
-                  发送 <PaperPlaneRight size={16} weight="regular" />
-                </>
-              )}
-            </button>
-          </form>
+      <div className="toolbar">
+        <div className="segmented" aria-label="学习方式">
+          <button
+            className={mode === "chat" ? "selected" : ""}
+            onClick={() => setMode("chat")}
+          >
+            对话练习
+          </button>
+          <button
+            className={mode === "cards" ? "selected" : ""}
+            onClick={() => setMode("cards")}
+          >
+            生成卡片
+          </button>
         </div>
       </div>
-      <p className="muted">
-        请先在 API
-        设置中配置服务。对话内容会发送给你选择的提供商。离开本页面将结束当前对话。
-      </p>
-      <p className="status error" role="status">
-        {error}
-      </p>
+      {mode === "chat" ? (
+        <>
+          <div className="chat-layout">
+            <div className="scenarios">
+              {scenarios.map((scene) => (
+                <button
+                  key={scene}
+                  disabled={busy}
+                  className={`scenario ${scene === scenario ? "selected" : ""}`}
+                  onClick={() => {
+                    setScenario(scene);
+                    setMessages([]);
+                    setError("");
+                  }}
+                >
+                  {scene}
+                </button>
+              ))}
+            </div>
+            <div className="chat-box">
+              <div className="messages" ref={list} aria-live="polite">
+                <div className="bubble">
+                  こんにちは！一起练习「{scenario}」吧。
+                  <br />
+                  你可以用日语开场，也可以用中文问我怎么表达。
+                </div>
+                {messages.map((message, i) => (
+                  <div
+                    key={i}
+                    className={`bubble ${message.role === "user" ? "user" : ""}`}
+                  >
+                    {message.content}
+                  </div>
+                ))}
+              </div>
+              <form className="chat-input" onSubmit={send}>
+                <input
+                  aria-label="对话内容"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="试着说：こんにちは！"
+                  maxLength={2000}
+                  disabled={busy}
+                />
+                <button className="primary" disabled={busy}>
+                  {busy ? (
+                    "思考中…"
+                  ) : (
+                    <>
+                      发送 <PaperPlaneRight size={16} weight="regular" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+          <p className="muted">
+            请先在 API
+            设置中配置服务。对话内容会发送给你选择的提供商。离开本页面将结束当前对话。
+          </p>
+          <p className="status error" role="status">
+            {error}
+          </p>
+        </>
+      ) : (
+        <CardGenerator config={config} apiKey={apiKey} activity={activity} />
+      )}
     </>
   );
 }

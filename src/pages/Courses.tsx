@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { SpeakerHigh } from "@phosphor-icons/react";
-import { courses } from "../data/content";
+import { allCourseCards, courses } from "../data/content";
 import { speak } from "../lib/speech";
+import { questionsFromCards, type QuizResult } from "../lib/quiz";
+import { useBack } from "../lib/back";
+import QuizSession from "../components/QuizSession";
+
 export default function Courses({
   selected,
   select,
@@ -17,12 +21,16 @@ export default function Courses({
   kana: () => void;
   chat: () => void;
 }) {
-  const [feedback, setFeedback] = useState("");
+  const [started, setStarted] = useState(false);
   const course = courses.find((c) => c.id === selected);
   function open(id: number | null) {
-    setFeedback("");
+    setStarted(false);
     select(id);
   }
+  useBack(course ? (started ? 3 : 2) : 0, () => {
+    if (started) setStarted(false);
+    else if (course) open(null);
+  });
   if (!course)
     return (
       <>
@@ -39,11 +47,24 @@ export default function Courses({
               onClick={() => open(c.id)}
             >
               {completed.includes(c.id) ? "✓" : "○"}　{c.id + 1}　{c.title}
-              <small>{c.description} · 对话 / 语法 / 小测</small>
+              <small>{c.description} · 对话 / 语法 / 卡片练习</small>
             </button>
           ))}
         </div>
       </>
+    );
+  if (started)
+    return (
+      <QuizSession
+        key={course.id}
+        title={course.title}
+        subtitle="课程练习"
+        rebuild={() => questionsFromCards(course.cards, allCourseCards)}
+        finish={(result: QuizResult) => {
+          if (result.stars > 0) complete(course.id);
+        }}
+        exit={() => setStarted(false)}
+      />
     );
   return (
     <>
@@ -68,29 +89,25 @@ export default function Courses({
           <SpeakerHigh size={16} weight="regular" /> 听日语示范
         </button>
         <p className="notice">{course.grammar}</p>
-        <h3>{course.question}</h3>
-        <div className="course-list">
-          {course.options.map((option, i) => (
-            <button
-              key={option}
-              className="secondary"
-              onClick={() => {
-                if (i === course.answer) {
-                  complete(course.id);
-                  setFeedback("✓ 回答正确，已记录学习进度。");
-                } else setFeedback("再想一想，可以回看上面的句型提示。");
-              }}
-            >
-              {option}
-            </button>
+        <div className="card-preview-list">
+          {course.cards.map((card) => (
+            <div className="card-preview" key={card.id}>
+              <strong lang="ja">{card.front}</strong>
+              <span>
+                {card.back}
+                {card.reading ? ` · ${card.reading}` : ""}
+              </span>
+            </div>
           ))}
         </div>
-        <p className="status" role="status">
-          {feedback}
-        </p>
+        <div className="actions">
+          <button className="primary" onClick={() => setStarted(true)}>
+            开始卡片练习 →
+          </button>
+        </div>
         {completed.includes(course.id) && (
           <button
-            className="primary"
+            className="secondary"
             onClick={() =>
               course.id + 1 < courses.length ? open(course.id + 1) : chat()
             }

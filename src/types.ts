@@ -6,6 +6,17 @@ export interface Word {
   example: string;
   translation: string;
 }
+export type CardKind = "word" | "grammar" | "dialogue";
+export interface Card {
+  id: string;
+  kind: CardKind;
+  front: string;
+  back: string;
+  reading?: string;
+  example?: string;
+  exampleMeaning?: string;
+  note?: string;
+}
 export interface Course {
   id: number;
   title: string;
@@ -13,9 +24,7 @@ export interface Course {
   symbol: string;
   dialogue: string;
   grammar: string;
-  question: string;
-  options: string[];
-  answer: number;
+  cards: Card[];
 }
 export interface Review {
   level: number;
